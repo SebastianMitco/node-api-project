@@ -12,10 +12,10 @@ const CourseSchema = new mongoose.Schema({
   },
   weeks: {
     type: String,
-    required: [true, "Please add a weeks"],
+    required: [true, "Please add number of weeks"],
   },
   tuition: {
-    type: String,
+    type: Number,
     required: [true, "Please add a tuition cost"],
   },
   minimumSkill: {
@@ -48,7 +48,7 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
     },
     {
       $group: {
-        _id: "$bootcamp",
+        _id: { $toString: "$bootcamp" },
         averageCost: { $avg: "$tuition" },
       },
     },
