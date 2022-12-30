@@ -8,6 +8,12 @@ const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
 
+//API Security
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
 //Load env vars
 dotenv.config({ path: "./config/config.env" });
 
@@ -36,6 +42,30 @@ if (process.env.NODE_ENV === "development") {
 
 //File uploading
 app.use(fileupload());
+
+//Sanitize data
+app.use(mongoSanitize());
+
+//Set securiry headers
+app.use(helmet());
+
+//Prevent XSS attacks
+app.use(xss());
+
+//Rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 100, // 10 min
+  max: 100,
+});
+
+app.use(limiter);
+
+//Prevent http param pollution
+app.use(hpp());
+
+// Add  npm i cors for using the API from onther host
+//
+//
 
 //Set static folder
 //@desc     let you access files in domain.com/uploads/file_name.jpg
