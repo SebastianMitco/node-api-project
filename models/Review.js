@@ -1,21 +1,21 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const ReviewSchema = new mongoose.Schema({
   title: {
     type: String,
     trim: true,
-    required: [true, "Please add a title for the review"],
+    required: [true, 'Please add a title for the review'],
     maxLenght: 100,
   },
   text: {
     type: String,
-    required: [true, "Please add some text"],
+    required: [true, 'Please add some text'],
   },
 
   rating: {
     type: Number,
     min: 1,
     max: 10,
-    required: [true, "Please add a rating between 1 and 10"],
+    required: [true, 'Please add a rating between 1 and 10'],
   },
   createdAt: {
     type: Date,
@@ -23,12 +23,12 @@ const ReviewSchema = new mongoose.Schema({
   },
   bootcamp: {
     type: mongoose.Schema.ObjectId,
-    ref: "Bootcamp",
+    ref: 'Bootcamp',
     required: true,
   },
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
 });
@@ -43,14 +43,14 @@ ReviewSchema.statics.getAverageRating = async function (bootcampId) {
     },
     {
       $group: {
-        _id: "$bootcamp",
-        averageRating: { $avg: "$rating" },
+        _id: '$bootcamp',
+        averageRating: { $avg: '$rating' },
       },
     },
   ]);
 
   try {
-    await this.model("Bootcamp").findByIdAndUpdate(bootcampId, {
+    await this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
       averageRating: obj[0].averageRating,
     });
   } catch (err) {
@@ -59,12 +59,12 @@ ReviewSchema.statics.getAverageRating = async function (bootcampId) {
 };
 
 // Call getAverageCost after save
-ReviewSchema.post("save", function () {
+ReviewSchema.post('save', function () {
   this.constructor.getAverageRating(this.bootcamp);
 });
 
 // Call getAverageCost before remove
-ReviewSchema.pre("remove", function () {
+ReviewSchema.pre('remove', function () {
   this.constructor.getAverageRating(this.bootcamp);
 });
-module.exports = mongoose.model("Review", ReviewSchema);
+module.exports = mongoose.model('Review', ReviewSchema);

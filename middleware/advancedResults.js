@@ -5,31 +5,34 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   let reqQuery = { ...req.query };
 
   //Fileds to exclude
-  const removeFields = ["select", "sort", "page", "limit"];
+  const removeFields = ['select', 'sort', 'page', 'limit'];
 
   //Loop over removeFields and delete them from reqQuery
-  removeFields.forEach(param => reqQuery[param]);
+  removeFields.forEach((param) => reqQuery[param]);
 
   //Create query string
   let queryStr = JSON.stringify(reqQuery);
 
   //Create operators ($gt, $gte , etc)
-  queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
 
   //Finding resource
   query = model.find(JSON.parse(queryStr));
 
   //Select Fields
   if (req.query.select) {
-    const fields = req.query.select.split(",").join(" ");
+    const fields = req.query.select.split(',').join(' ');
     query = query.select(fields);
   }
   //Sort (Default descending Date)
   if (req.query.sort) {
-    const sortBy = req.query.sort.split(",").join(" ");
+    const sortBy = req.query.sort.split(',').join(' ');
     query = query.sort(sortBy);
   } else {
-    query = query.sort("-createdAt");
+    query = query.sort('-createdAt');
   }
   //Pagination
   const page = parseInt(req.query.page, 10) || 1;
