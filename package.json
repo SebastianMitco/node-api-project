@@ -4,6 +4,8 @@
   "description": "Developing a complete Node JS API",
   "main": "index.js",
   "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,json,ts,tsx}\"",
+    "lint": "prettier --check \"**/*.{js,jsx,json,ts,tsx}\"",
     "start": "NODE_ENV=production node server",
     "dev": "nodemon server"
   },
@@ -30,6 +32,7 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "prettier": "^3.3.3"
   }
 }
