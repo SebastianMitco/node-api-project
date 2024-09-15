@@ -7,7 +7,7 @@ const fileupload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
-
+const cors = require("cors");
 //API Security
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
@@ -29,6 +29,7 @@ const reviews = require("./routes/reviews");
 
 const app = express();
 
+app.use(cors());
 //Body parser
 app.use(express.json());
 
