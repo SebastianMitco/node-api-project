@@ -1,13 +1,13 @@
-const path = require("path");
+
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
-const Category = require("../models/Category");
+const Recipe = require("../models/Recipe");
 const User = require("../models/User");
 
-// @desc        Get categories for the authenticated user
-// @route       GET /api/v1/categories
+// @desc        Get Recipes for the authenticated user
+// @route       GET /api/v1/recipes
 // @access      Private
-exports.getCategories = asyncHandler(async (req, res, next) => {
+exports.getRecipes = asyncHandler(async (req, res, next) => {
 
     req.body.user = req.user.id;
     const user = await User.findById(req.user.id);
@@ -19,19 +19,19 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
             )
         );
     }
-    // Fetch categories created by the authenticated user
-    const categories = await Category.find({user: req.user.id});
+    // Fetch recipes created by the authenticated user
+    const recipes = await Recipe.find({user: req.user.id});
     res.status(201).json({
         success: true,
-        data: categories,
+        data: recipes,
     });
 
 });
 
-// @desc        Create new category
-// @route       POST /api/v1/category/
+// @desc        Create new Recipe
+// @route       POST /api/v1/recipes
 // @access      Private
-exports.createCategory = asyncHandler(async (req, res, next) => {
+exports.createRecipe = asyncHandler(async (req, res, next) => {
     req.body.user = req.user.id;
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -42,7 +42,7 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
             )
         );
     }
-    const category = await Category.create(req.body);
+    const category = await Recipe.create(req.body);
 
     res.status(201).json({
         success: true,
