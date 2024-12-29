@@ -33,6 +33,7 @@ const reviews = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/reviews.json`, "utf-8")
 );
 // Import into DB
+//TODO: add categories to seeder
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps);
